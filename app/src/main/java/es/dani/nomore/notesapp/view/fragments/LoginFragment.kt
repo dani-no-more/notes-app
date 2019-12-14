@@ -18,7 +18,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
         binding.loginButton.setOnClickListener { doLogin() }
-        binding.registerButton.setOnClickListener { showError("Testing getting an error!") }
+        binding.registerButton.setOnClickListener { findNavController().navigate(R.id.action_login_fragment_to_createUserFragment) }
 
 
         return binding.root

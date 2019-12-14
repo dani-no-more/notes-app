@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="userViewModel"
+            type="es.dani.nomore.notesapp.model.viewmodels.UserViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/create_user_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fragments.CreateUserFragment">
+
+        <TextView
+            android:id="@+id/username_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/username_label"
+            app:layout_constraintBottom_toTopOf="@+id/username_edit_text"
+            app:layout_constraintStart_toStartOf="@+id/username_edit_text"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <EditText
+            android:id="@+id/username_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/username_hint"
+            android:inputType="textPersonName"
+            android:text="@={userViewModel.currentUser.username}"
+            app:layout_constraintBottom_toTopOf="@+id/create_user_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_label"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/create_user_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/user_label"
+            app:layout_constraintBottom_toTopOf="@+id/create_user_edit_text"
+            app:layout_constraintStart_toStartOf="@+id/username_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/username_edit_text" />
+
+        <EditText
+            android:id="@+id/create_user_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/user_hint"
+            android:inputType="textEmailAddress"
+            android:text="@={userViewModel.currentUser.email}"
+            app:layout_constraintBottom_toTopOf="@+id/create_password_text_view"
+            app:layout_constraintStart_toStartOf="@+id/create_user_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/create_user_text_view"
+            android:importantForAutofill="no" />
+
+        <TextView
+            android:id="@+id/create_password_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/password_label"
+            app:layout_constraintBottom_toTopOf="@+id/create_password_edit_text"
+            app:layout_constraintStart_toStartOf="@+id/create_user_edit_text"
+            app:layout_constraintTop_toBottomOf="@+id/create_user_edit_text" />
+
+        <EditText
+            android:id="@+id/create_password_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/password_content_desc"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:text="@={userViewModel.currentUser.password}"
+            app:layout_constraintBottom_toTopOf="@+id/create_user_button"
+            app:layout_constraintStart_toStartOf="@+id/create_password_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/create_password_text_view" />
+
+        <Button
+            android:id="@+id/create_user_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/register_button_text"
+            android:onClick="@{() -> userViewModel.createUser()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_password_edit_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

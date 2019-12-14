@@ -15,10 +15,27 @@
             app:destination="@id/notes_fragment"
             app:popUpTo="@+id/login_fragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_login_fragment_to_createUserFragment"
+            app:destination="@id/createUserFragment" />
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
     <fragment
         android:id="@+id/notes_fragment"
         android:name="es.dani.nomore.notesapp.view.fragments.NotesFragment"
         android:label="fragment_notes"
         tools:layout="@layout/fragment_notes" />
+    <fragment
+        android:id="@+id/createUserFragment"
+        android:name="es.dani.nomore.notesapp.view.fragments.CreateUserFragment"
+        android:label="CreateUserFragment" >
+        <action
+            android:id="@+id/action_createUserFragment_to_login_fragment"
+            app:destination="@id/login_fragment"
+            app:popUpTo="@+id/createUserFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
