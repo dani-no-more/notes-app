@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="noteViewModel"
+            type="es.dani.nomore.notesapp.model.viewmodels.NoteViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/create_note_layout"
+        tools:context=".view.fragments.CreateEditNoteFragment">
+
+
+        <TextView
+            android:id="@+id/note_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/note_title_label"
+            app:layout_constraintBaseline_toBaselineOf="@+id/editText"
+            app:layout_constraintStart_toStartOf="@+id/note_content_edit_text" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={noteViewModel.currentNote.title}"
+            app:layout_constraintEnd_toEndOf="@+id/note_content_edit_text"
+            app:layout_constraintStart_toEndOf="@+id/note_title_text"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="My Note" />
+
+        <EditText
+            android:id="@+id/note_content_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:text="@={noteViewModel.currentNote.content}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText"
+            tools:text="Lorem ipsum dolor sit amet consectetur adipiscing elit enim habitasse tortor libero convallis semper, primis sem euismod nisi risus ligula ultricies tempus morbi suspendisse neque ridiculus. Dictum tempor nam rhoncus erat torquent sapien, phasellus faucibus pharetra nisi interdum magnis, orci scelerisque velit quisque at. Id sem varius consequat suspendisse justo non enim, sollicitudin class duis vel quisque nulla, nullam turpis sagittis inceptos hendrerit facilisis." />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/save_note_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:onClick="@{() -> noteViewModel.saveNote()}"
+            android:src="@android:drawable/ic_menu_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

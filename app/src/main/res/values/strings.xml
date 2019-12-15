@@ -20,8 +20,14 @@
     <string name="invalid_user">Invalid user or empty</string>
     <string name="user_exists">User already exists</string>
     <string name="invalid_password">Password should has at least 8 characters</string>
-    <string name="username_title_text">%1$s\'s Notes</string>
 
 
     <!-- NOTES -->
+    <string name="username_title_text">%1$s\'s Notes</string>
+    <string name="note_title_label">Title</string>
+
+    <!-- Validation messages -->
+    <string name="note_title_not_blank">Note\'s title should not be blank</string>
+    <string name="note_content_not_blank">Note\'s content should not be blank</string>
+
 </resources>

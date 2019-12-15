@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.LoginFragmentBinding
-import es.dani.nomore.notesapp.model.NotesDatabase
+import es.dani.nomore.notesapp.model.database.NotesDatabase
 import es.dani.nomore.notesapp.model.entities.User
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModel
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModelFactory
@@ -27,8 +27,7 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
 
         val application = requireNotNull(this.activity).application
-        val userDao = NotesDatabase.getInstance(application).UserDao()
-
+        val userDao = NotesDatabase.getInstance(application).userDao()
         val userId = LoginFragmentArgs.fromBundle(requireArguments()).userId
         val userViewModelFactory = UserViewModelFactory(userDao, application, userId)
         val userViewModel = ViewModelProviders.of(this, userViewModelFactory).get(UserViewModel::class.java)
@@ -38,7 +37,7 @@ class LoginFragment : Fragment() {
 
         userViewModel.validationError.observe(this, Observer { showToastValidationError(it) })
         userViewModel.loginUser.observe(this, Observer { loginSuccess(it) })
-        binding.registerButton.setOnClickListener { findNavController().navigate(R.id.action_login_fragment_to_createUserFragment) }
+        binding.registerButton.setOnClickListener { goToUserRegister() }
 
         return binding.root
     }
@@ -50,6 +49,8 @@ class LoginFragment : Fragment() {
             findNavController().navigate(action)
         }
     }
+
+    private fun goToUserRegister() = findNavController().navigate(R.id.action_login_fragment_to_createUserFragment)
 
     private fun showToastValidationError(msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
