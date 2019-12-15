@@ -8,7 +8,7 @@ import es.dani.nomore.notesapp.model.entities.Note
 @Dao
 interface NoteDao {
     @Insert
-    fun insert(note: Note)
+    fun insert(note: Note): Long
 
     @Update
     fun update(note: Note)
@@ -19,7 +19,7 @@ interface NoteDao {
     @Query("SELECT * FROM note_table WHERE noteId = :key")
     fun get(key: Long): Note?
 
-    @Query("SELECT * FROM note_table WHERE owner = :userId ORDER BY creation_time DESC")
+    @Query("SELECT * FROM note_table WHERE owner = :userId ORDER BY last_modification_time DESC")
     fun getNotesByUser(userId: Long): LiveData<List<Note>>
 
     @Query("DELETE FROM user_table")

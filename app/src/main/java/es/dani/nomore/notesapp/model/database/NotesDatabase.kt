@@ -1,4 +1,4 @@
-package es.dani.nomore.notesapp.model
+package es.dani.nomore.notesapp.model.database
 
 import android.content.Context
 import androidx.room.Database
@@ -10,7 +10,7 @@ import es.dani.nomore.notesapp.model.entities.Note
 import es.dani.nomore.notesapp.model.entities.User
 
 
-@Database(entities = [User::class, Note::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Note::class], version = 3, exportSchema = false)
 abstract class NotesDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun noteDao(): NoteDao
@@ -21,7 +21,10 @@ abstract class NotesDatabase: RoomDatabase() {
 
         fun getInstance(context: Context): NotesDatabase {
             synchronized(this) {
-                return instance ?: Room.databaseBuilder(context.applicationContext, NotesDatabase::class.java, NOTES_DATABASE)
+                return instance
+                    ?: Room.databaseBuilder(context.applicationContext, NotesDatabase::class.java,
+                        NOTES_DATABASE
+                    )
                     .fallbackToDestructiveMigration()
                     .build()
             }

@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentCreateUserBinding
-import es.dani.nomore.notesapp.model.NotesDatabase
+import es.dani.nomore.notesapp.model.database.NotesDatabase
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModel
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModelFactory
 

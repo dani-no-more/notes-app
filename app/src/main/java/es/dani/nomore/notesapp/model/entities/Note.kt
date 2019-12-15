@@ -18,8 +18,8 @@ data class Note(
     @ColumnInfo(name = "content")
     var content: String,
 
-    @ColumnInfo(name = "creation_time")
-    var creationTime: Long,
+    @ColumnInfo(name = "last_modification_time")
+    var lastModificationTime: Long = System.currentTimeMillis(),
 
     @ColumnInfo(name = "owner")
     var owner: Long

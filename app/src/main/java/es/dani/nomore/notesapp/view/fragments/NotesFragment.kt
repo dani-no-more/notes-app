@@ -7,9 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentNotesBinding
+import es.dani.nomore.notesapp.model.database.NotesDatabase
+import es.dani.nomore.notesapp.model.viewmodels.NoteViewModel
+import es.dani.nomore.notesapp.model.viewmodels.NoteViewModelFactory
+import es.dani.nomore.notesapp.view.adapters.NotesAdapter
 
 
 class NotesFragment : Fragment() {
@@ -18,10 +24,27 @@ class NotesFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding: FragmentNotesBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notes, container, false)
 
+        val application = requireNotNull(this.activity).application
+        val noteDao = NotesDatabase.getInstance(application).noteDao()
         val userId = NotesFragmentArgs.fromBundle(requireArguments()).userId
         val username = NotesFragmentArgs.fromBundle(requireArguments()).username
 
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.username_title_text, username)
+
+        val noteViewModelFactory = NoteViewModelFactory(noteDao, application, userId)
+        val noteViewModel = ViewModelProviders.of(this, noteViewModelFactory).get(NoteViewModel::class.java)
+
+        binding.lifecycleOwner = this
+        binding.noteViewModel = noteViewModel
+
+        val adapter = NotesAdapter()
+        binding.noteList.adapter = adapter
+
+        noteViewModel.noteList.observe(this, Observer {
+            adapter.submitList(it)
+        })
+
+        binding.addNoteFab.setOnClickListener {  }
         return binding.root
     }
 

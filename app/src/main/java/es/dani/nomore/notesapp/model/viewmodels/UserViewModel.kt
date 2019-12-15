@@ -59,11 +59,7 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
 
     private fun initializeUser() {
         uiScope.launch {
-            if (userId != null) {
-                currentUser.value = getUserById(userId)
-            }
-            if (currentUser.value == null)
-                currentUser.value = getEmptyUser()
+            currentUser.value = getUserById(userId) ?: getEmptyUser()
         }
     }
 
