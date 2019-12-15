@@ -56,14 +56,18 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
     }
 
     private suspend fun upsertNote(note: Note): Long {
+        Log.i("NoteViewModel", "Upsert note: %s".format(note.toString()))
         return withContext(Dispatchers.IO) {
-            if (noteId != null && noteId >= 0) {
-                Log.i("NoteViewModel", "Editing note")
-                noteDao.update(note)
-                noteId
-            } else {
-                Log.i("NoteViewModel", "Creating note")
-                noteDao.insert(note)
+            when(isEdition()) {
+                true -> {
+                    Log.i("NoteViewModel", "Editing note")
+                    noteDao.update(note.copy(noteId = noteId!!))
+                    noteId!!
+                }
+                false -> {
+                    Log.i("NoteViewModel", "Creating note")
+                    noteDao.insert(note)
+                }
             }
         }
     }
@@ -71,6 +75,8 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
     private fun getEmptyNote(): Note {
         return Note(title = "", content = "", owner = -1L)
     }
+
+    private fun isEdition() = noteId != null && noteId >= 0
 
     private fun validateTitle(): Boolean {
         val title = currentNote.value?.title

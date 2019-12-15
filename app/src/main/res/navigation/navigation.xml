@@ -13,7 +13,7 @@
         <action
             android:id="@+id/action_login_fragment_to_notes_fragment"
             app:destination="@id/notes_fragment"
-            app:popUpTo="@+id/login_fragment"
+            app:popUpTo="@+id/navigation"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_login_fragment_to_createUserFragment"
@@ -51,6 +51,10 @@
             app:destination="@id/login_fragment"
             app:popUpTo="@+id/createUserFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="isRegistration"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/createEditNoteFragment"
@@ -64,5 +68,13 @@
             android:name="userId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_createEditNoteFragment_to_notes_fragment"
+            app:destination="@id/notes_fragment"
+            app:popUpTo="@+id/createEditNoteFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="username"
+            app:argType="string" />
     </fragment>
 </navigation>

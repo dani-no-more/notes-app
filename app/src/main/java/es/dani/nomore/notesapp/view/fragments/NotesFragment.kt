@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -15,8 +16,10 @@ import androidx.navigation.fragment.findNavController
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentNotesBinding
 import es.dani.nomore.notesapp.model.database.NotesDatabase
+import es.dani.nomore.notesapp.model.entities.Note
 import es.dani.nomore.notesapp.model.viewmodels.NoteViewModel
 import es.dani.nomore.notesapp.model.viewmodels.NoteViewModelFactory
+import es.dani.nomore.notesapp.view.adapters.NoteItemViewHolder
 import es.dani.nomore.notesapp.view.adapters.NotesAdapter
 
 
@@ -39,7 +42,11 @@ class NotesFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.noteViewModel = noteViewModel
 
-        val adapter = NotesAdapter()
+        val adapter = NotesAdapter(object: NoteItemViewHolder.NoteItemClickListener {
+            override fun onItemClick(note: Note) {
+                goToEditNote(note.noteId, userId, username)
+            }
+        })
         noteViewModel.noteList.observe(viewLifecycleOwner, Observer {
             Log.i("NotesFragment", "The list of notes has changed")
             adapter.submitList(it)
@@ -47,12 +54,17 @@ class NotesFragment : Fragment() {
         })
         binding.noteList.adapter = adapter
 
-        binding.addNoteFab.setOnClickListener { goToNewNote(userId) }
+        binding.addNoteFab.setOnClickListener { goToNewNote(userId, username) }
         return binding.root
     }
 
-    private fun goToNewNote(userId: Long) {
-        val action = NotesFragmentDirections.actionNotesFragmentToCreateEditNoteFragment(userId = userId)
+    private fun goToNewNote(userId: Long, username: String) {
+        val action = NotesFragmentDirections.actionNotesFragmentToCreateEditNoteFragment(userId = userId, username = username)
+        findNavController().navigate(action)
+    }
+
+    private fun goToEditNote(noteId: Long, userId: Long, username: String) {
+        val action = NotesFragmentDirections.actionNotesFragmentToCreateEditNoteFragment(noteId, userId, username)
         findNavController().navigate(action)
     }
 

@@ -46,7 +46,6 @@ class CreateUserFragment : Fragment() {
             findNavController().navigate(action)
         })
 
-        //getFragmentManager().popBackStackImmediate();
         return binding.root
     }
 

@@ -1,6 +1,7 @@
 package es.dani.nomore.notesapp.view.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import es.dani.nomore.notesapp.databinding.NoteListItemViewBinding
 import es.dani.nomore.notesapp.model.entities.Note
 
-class NotesAdapter: ListAdapter<Note, NoteItemViewHolder>(NoteDiffCallback()) {
+class NotesAdapter(private val listener: NoteItemViewHolder.NoteItemClickListener): ListAdapter<Note, NoteItemViewHolder>(NoteDiffCallback()) {
 
     override fun onBindViewHolder(holder: NoteItemViewHolder, position: Int) =
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), listener)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteItemViewHolder =
         NoteItemViewHolder.from(parent)
@@ -20,7 +21,10 @@ class NotesAdapter: ListAdapter<Note, NoteItemViewHolder>(NoteDiffCallback()) {
 
 
 class NoteItemViewHolder private constructor(val binding: NoteListItemViewBinding): RecyclerView.ViewHolder(binding.root) {
-    fun bind(note: Note) {
+    fun bind(note: Note, listener: NoteItemClickListener) {
+        binding.itemNoteTitleText.setOnClickListener {
+            listener.onItemClick(note)
+        }
         binding.note = note
         binding.executePendingBindings()
         //binding.itemNoteTitleText.text = note.title
@@ -33,6 +37,10 @@ class NoteItemViewHolder private constructor(val binding: NoteListItemViewBindin
                 NoteListItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return NoteItemViewHolder(binding)
         }
+    }
+
+    interface NoteItemClickListener {
+        fun onItemClick(note: Note)
     }
 }
 
