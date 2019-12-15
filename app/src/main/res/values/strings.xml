@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">NotesApp</string>
+
+    <!-- USERS -->
+    <string name="user_label">User</string>
+    <string name="password_label">Password</string>
+    <string name="user_hint">Email...</string>
+    <string name="error_label">Error</string>
+    <string name="login_icon_desc">Green pencil</string>
+    <string name="login_button_text">Login</string>
+    <string name="register_button_text">Register</string>
+    <string name="username_label">Username</string>
+    <string name="username_hint">Name, nick...</string>
+    <string name="password_content_desc">Enter a secret password</string>
+
+    <!-- Validation messages -->
+    <string name="user_not_found">User not found</string>
+    <string name="credential_fail">Invalid password</string>
+    <string name="username_not_blank">Username cannot be empty</string>
+    <string name="invalid_user">Invalid user or empty</string>
+    <string name="user_exists">User already exists</string>
+    <string name="invalid_password">Password should has at least 8 characters</string>
+    <string name="username_title_text">%1$s\'s Notes</string>
+
+
+    <!-- NOTES -->
 </resources>
