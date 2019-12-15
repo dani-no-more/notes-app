@@ -37,6 +37,9 @@
             android:name="username"
             app:argType="string"
             android:defaultValue="user" />
+        <action
+            android:id="@+id/action_notes_fragment_to_createEditNoteFragment"
+            app:destination="@id/createEditNoteFragment" />
     </fragment>
 
     <fragment
@@ -48,5 +51,18 @@
             app:destination="@id/login_fragment"
             app:popUpTo="@+id/createUserFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/createEditNoteFragment"
+        android:name="es.dani.nomore.notesapp.view.fragments.CreateEditNoteFragment"
+        android:label="CreateEditNoteFragment" >
+        <argument
+            android:name="noteId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 </navigation>

@@ -10,7 +10,7 @@ import es.dani.nomore.notesapp.model.entities.Note
 import es.dani.nomore.notesapp.model.entities.User
 
 
-@Database(entities = [User::class, Note::class], version = 3, exportSchema = false)
+@Database(entities = [User::class, Note::class], version = 5, exportSchema = false)
 abstract class NotesDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun noteDao(): NoteDao

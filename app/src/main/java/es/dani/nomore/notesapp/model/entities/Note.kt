@@ -1,12 +1,21 @@
 package es.dani.nomore.notesapp.model.entities
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.util.*
 
 
 @Entity(tableName = "note_table",
     foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["userId"], childColumns = ["owner"], onDelete = CASCADE)],
-    indices = [Index(value = ["title"], unique = true)]
+    indices = [Index(value = ["title", "owner"], unique = true), Index(value = ["owner"])]
 )
 data class Note(
     @PrimaryKey(autoGenerate = true)
@@ -23,6 +32,4 @@ data class Note(
 
     @ColumnInfo(name = "owner")
     var owner: Long
-
-
 )
