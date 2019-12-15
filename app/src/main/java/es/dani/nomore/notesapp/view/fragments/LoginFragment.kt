@@ -27,7 +27,7 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
 
         val application = requireNotNull(this.activity).application
-        val userDao = NotesDatabase.getInstance(application).UserDao()
+        val userDao = NotesDatabase.getInstance(application).userDao()
 
         val userId = LoginFragmentArgs.fromBundle(requireArguments()).userId
         val userViewModelFactory = UserViewModelFactory(userDao, application, userId)

@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import es.dani.nomore.notesapp.model.dao.NoteDao
 import es.dani.nomore.notesapp.model.dao.UserDao
+import es.dani.nomore.notesapp.model.entities.Note
 import es.dani.nomore.notesapp.model.entities.User
 
 
-@Database(entities = [User::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Note::class], version = 2, exportSchema = false)
 abstract class NotesDatabase: RoomDatabase() {
-    abstract fun UserDao(): UserDao
+    abstract fun userDao(): UserDao
+    abstract fun noteDao(): NoteDao
 
     companion object {
         private const val NOTES_DATABASE = "notes_db"
