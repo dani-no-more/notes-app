@@ -14,10 +14,13 @@
     <string name="password_content_desc">Enter a secret password</string>
 
     <!-- Validation messages -->
+    <string name="user_not_found">User not found</string>
+    <string name="credential_fail">Invalid password</string>
     <string name="username_not_blank">Username cannot be empty</string>
     <string name="invalid_user">Invalid user or empty</string>
     <string name="user_exists">User already exists</string>
     <string name="invalid_password">Password should has at least 8 characters</string>
+    <string name="username_title_text">%1$s\'s Notes</string>
 
 
     <!-- NOTES -->

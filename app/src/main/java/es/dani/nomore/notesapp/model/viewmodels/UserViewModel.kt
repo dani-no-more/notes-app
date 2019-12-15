@@ -1,6 +1,7 @@
 package es.dani.nomore.notesapp.model.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import es.dani.nomore.notesapp.R
@@ -9,13 +10,15 @@ import es.dani.nomore.notesapp.model.entities.User
 import kotlinx.coroutines.*
 
 
-class UserViewModel(private val userDao: UserDao, application: Application, var userId: Long? = null): AndroidViewModel(application) {
+class UserViewModel(private val userDao: UserDao, application: Application, private val userId: Long? = null): AndroidViewModel(application) {
 
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     val currentUser = MutableLiveData<User>()
+    val loginUser = MutableLiveData<User>()
     val validationError = MutableLiveData<String>()
+    val newUserId = MutableLiveData<Long>()
 
     init {
         initializeUser()
@@ -26,10 +29,31 @@ class UserViewModel(private val userDao: UserDao, application: Application, var 
         viewModelJob.cancel()
     }
 
+    fun checkLogin() {
+        if (validateUser() && validatePassword()) {
+            Log.i("UserViewModel", "Valid user and password")
+            uiScope.launch {
+                val user = getUserByEmail(currentUser.value!!.email)
+                if (user != null) {
+                    Log.i("UserViewModel", "User exists")
+                    if (user.password == currentUser.value?.password) {
+                        Log.i("UserViewModel", "Password correct")
+                        loginUser.value = user
+                    } else {
+                        validationError.value = getApplication<Application>().getString(R.string.credential_fail)
+                    }
+                } else {
+                    validationError.value = getApplication<Application>().getString(R.string.user_not_found)
+                }
+            }
+        }
+
+    }
+
     fun createUser() {
         if (validateUsername() && validateUser() && validatePassword())
             uiScope.launch {
-                addUser(currentUser.value!!)
+                newUserId.value = upsertUser(currentUser.value!!)
             }
     }
 
@@ -49,8 +73,25 @@ class UserViewModel(private val userDao: UserDao, application: Application, var 
         }
     }
 
-    private suspend fun addUser(user: User) {
-        withContext(Dispatchers.IO) {
+    private suspend fun getUserByEmail(email: String): User? {
+        return withContext(Dispatchers.IO) {
+            userDao.getUser(email)
+        }
+    }
+
+    private suspend fun upsertUser(user: User): Long {
+        return withContext(Dispatchers.IO) {
+            if (userId != null) { // Update
+                userDao.update(user)
+                userId
+            }
+            else
+                userDao.insert(user)
+        }
+    }
+
+    private suspend fun addUser(user: User): Long {
+        return withContext(Dispatchers.IO) {
             userDao.insert(user)
         }
     }

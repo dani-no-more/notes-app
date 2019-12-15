@@ -7,7 +7,7 @@ import es.dani.nomore.notesapp.model.entities.User
 @Dao
 interface UserDao {
     @Insert
-    suspend fun insert(user: User)
+    suspend fun insert(user: User): Long
 
     @Update
     suspend fun update(user: User)
@@ -17,6 +17,9 @@ interface UserDao {
 
     @Query("SELECT * FROM user_table WHERE userId = :key")
     suspend fun get(key: Long): User?
+
+    @Query("SELECT * FROM user_table WHERE email = :user")
+    suspend fun getUser(user: String): User?
 
     @Query("SELECT * FROM user_table ORDER BY username ASC")
     fun getAllUsers(): LiveData<List<User>>

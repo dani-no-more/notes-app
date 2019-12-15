@@ -8,9 +8,10 @@
 
         <!-- TODO: Update blank fragment layout -->
         <TextView
+            android:id="@+id/username_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="..." />
+            android:text="@string/username_title_text" />
 
     </FrameLayout>
 

@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentCreateUserBinding
@@ -26,16 +27,15 @@ import kotlinx.coroutines.launch
 
 class CreateUserFragment : Fragment() {
 
-    private lateinit var application: Application
     lateinit var binding: FragmentCreateUserBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_user, container, false)
 
-        application = requireNotNull(this.activity).application
+        val application = requireNotNull(this.activity).application
         val userDao = NotesDatabase.getInstance(application).UserDao()
 
-        val userViewModelFactory = UserViewModelFactory(userDao, application, 1L)
+        val userViewModelFactory = UserViewModelFactory(userDao, application)
         val userViewModel = ViewModelProviders.of(this, userViewModelFactory).get(UserViewModel::class.java)
 
         binding.userViewModel = userViewModel
@@ -47,6 +47,13 @@ class CreateUserFragment : Fragment() {
                 showToastValidationError(it)
         })
 
+        userViewModel.newUserId.observe(this, Observer {
+            showToastValidationError("User created!")
+            val action = CreateUserFragmentDirections.actionCreateUserFragmentToLoginFragment(it)
+            findNavController().navigate(action)
+        })
+
+        //getFragmentManager().popBackStackImmediate();
         return binding.root
     }
 

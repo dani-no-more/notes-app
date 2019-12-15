@@ -23,11 +23,22 @@
             app:argType="long"
             android:defaultValue="-1L" />
     </fragment>
+
     <fragment
         android:id="@+id/notes_fragment"
         android:name="es.dani.nomore.notesapp.view.fragments.NotesFragment"
         android:label="fragment_notes"
-        tools:layout="@layout/fragment_notes" />
+        tools:layout="@layout/fragment_notes">
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="username"
+            app:argType="string"
+            android:defaultValue="user" />
+    </fragment>
+
     <fragment
         android:id="@+id/createUserFragment"
         android:name="es.dani.nomore.notesapp.view.fragments.CreateUserFragment"
