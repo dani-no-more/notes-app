@@ -64,6 +64,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="24dp"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="@{() -> noteViewModel.saveNote()}"
             android:src="@android:drawable/ic_menu_edit"
             app:layout_constraintBottom_toBottomOf="parent"

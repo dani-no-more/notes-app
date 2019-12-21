@@ -24,6 +24,8 @@
 
     <!-- NOTES -->
     <string name="username_title_text">%1$s\'s Notes</string>
+    <string name="new_note_title_text">Create a new Note</string>
+    <string name="edit_note_title_text">Edit Note</string>
     <string name="note_title_label">Title</string>
 
     <!-- Validation messages -->
