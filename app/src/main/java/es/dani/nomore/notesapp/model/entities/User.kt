@@ -18,5 +18,8 @@ data class User(
     var email: String,
 
     @ColumnInfo(name = "password")
-    var password: String
+    var password: String,
+
+    @ColumnInfo(name = "user_role")
+    var userRole: Int = UserRole.TEAM_MEMBER.userRoleId
 )

@@ -6,6 +6,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/notes_action_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:menu="@menu/action_bar_menu"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
         <fragment
             android:id="@+id/navigation_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -14,6 +24,7 @@
             app:navGraph="@navigation/navigation"
             app:defaultNavHost="true">
         </fragment>
+
     </LinearLayout>
 
 </layout>

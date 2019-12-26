@@ -9,9 +9,11 @@
     <string name="login_icon_desc">Green pencil</string>
     <string name="login_button_text">Login</string>
     <string name="register_button_text">Register</string>
+    <string name="save_user_button_text">Save</string>
     <string name="username_label">Username</string>
     <string name="username_hint">Name, nick...</string>
     <string name="password_content_desc">Enter a secret password</string>
+    <string name="role_label">Role:</string>
 
     <!-- Validation messages -->
     <string name="user_not_found">User not found</string>
@@ -31,5 +33,12 @@
     <!-- Validation messages -->
     <string name="note_title_not_blank">Note\'s title should not be blank</string>
     <string name="note_content_not_blank">Note\'s content should not be blank</string>
+
+
+    <!-- Menu options -->
+    <string name="profile_action_title">Profile</string>
+    <string name="logout_action_title">Logout</string>
+    <string name="users_management_menu_title">Users</string>
+    <string name="notes_management_menu_title">Notes</string>
 
 </resources>

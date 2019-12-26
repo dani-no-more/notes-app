@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Profile and Logout should always be in the overflow -->
+    <item
+        android:id="@+id/overflow_profile_action"
+        android:title="@string/profile_action_title"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/overflow_logout_action"
+        android:title="@string/logout_action_title"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_users_management"
+        android:title="@string/users_management_menu_title"
+        android:icon="@drawable/ic_users_management"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_item_notes_management"
+        android:title="@string/notes_management_menu_title"
+        android:icon="@drawable/ic_notes_management"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+</menu>
