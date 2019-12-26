@@ -15,7 +15,6 @@
         android:id="@+id/notes_constraint_layout"
         tools:context=".view.fragments.NotesFragment">
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/note_list"
             android:layout_width="0dp"

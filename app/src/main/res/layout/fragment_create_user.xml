@@ -24,13 +24,14 @@
             app:layout_constraintBottom_toTopOf="@+id/username_edit_text"
             app:layout_constraintStart_toStartOf="@+id/username_edit_text"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"/>
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <EditText
             android:id="@+id/username_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/username_hint"
             android:inputType="textPersonName"
@@ -39,8 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username_label"
-            android:autofillHints="" />
+            app:layout_constraintTop_toBottomOf="@+id/username_label" />
 
         <TextView
             android:id="@+id/create_user_text_view"
@@ -59,12 +59,12 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="@string/user_hint"
+            android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:text="@={userViewModel.currentUser.email}"
             app:layout_constraintBottom_toTopOf="@+id/create_password_text_view"
             app:layout_constraintStart_toStartOf="@+id/create_user_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/create_user_text_view"
-            android:importantForAutofill="no" />
+            app:layout_constraintTop_toBottomOf="@+id/create_user_text_view" />
 
         <TextView
             android:id="@+id/create_password_text_view"
@@ -86,7 +86,7 @@
             android:importantForAutofill="no"
             android:inputType="textPassword"
             android:text="@={userViewModel.currentUser.password}"
-            app:layout_constraintBottom_toTopOf="@+id/create_user_button"
+            app:layout_constraintBottom_toTopOf="@+id/user_role_spinner"
             app:layout_constraintStart_toStartOf="@+id/create_password_text_view"
             app:layout_constraintTop_toBottomOf="@+id/create_password_text_view" />
 
@@ -94,14 +94,37 @@
             android:id="@+id/create_user_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/register_button_text"
+            android:layout_marginTop="32dp"
             android:onClick="@{() -> userViewModel.createUser()}"
+            android:text="@string/save_user_button_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/create_password_edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/user_role_spinner" />
+
+        <Spinner
+            android:id="@+id/user_role_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:spinnerMode="dropdown"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/create_user_button"
+            app:layout_constraintStart_toEndOf="@+id/user_role_label"
+            app:layout_constraintTop_toBottomOf="@+id/create_password_edit_text"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/user_role_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/role_label"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/create_password_edit_text"
+            app:layout_constraintTop_toTopOf="@+id/user_role_spinner"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

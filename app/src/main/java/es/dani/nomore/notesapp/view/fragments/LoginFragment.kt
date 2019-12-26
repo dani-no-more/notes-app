@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -25,6 +27,8 @@ class LoginFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
+
+        (activity as AppCompatActivity).supportActionBar?.hide()
 
         val application = requireNotNull(this.activity).application
         val userDao = NotesDatabase.getInstance(application).userDao()
@@ -45,12 +49,15 @@ class LoginFragment : Fragment() {
     private fun loginSuccess(loginUser: User?) {
         if (loginUser != null) {
             Log.i("LoginFragment", "Login success")
-            val action = LoginFragmentDirections.actionLoginFragmentToNotesFragment(loginUser.userId, loginUser.username)
+            val action = LoginFragmentDirections.actionLoginFragmentToNotesFragment(loginUser.userId, loginUser.username, loginUser.userRole)
             findNavController().navigate(action)
         }
     }
 
-    private fun goToUserRegister() = findNavController().navigate(R.id.action_login_fragment_to_createUserFragment)
+    private fun goToUserRegister() {
+        val action = LoginFragmentDirections.actionLoginFragmentToCreateUserFragment(true)
+        findNavController().navigate(action)
+    }
 
     private fun showToastValidationError(msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show()

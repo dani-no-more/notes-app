@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.model.dao.UserDao
 import es.dani.nomore.notesapp.model.entities.User
+import es.dani.nomore.notesapp.model.entities.UserRole
 import kotlinx.coroutines.*
 
 
@@ -28,6 +29,8 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
         super.onCleared()
         viewModelJob.cancel()
     }
+
+    fun isEditing() = userId != null && userId >= 0
 
     fun checkLogin() {
         if (validateUser() && validatePassword()) {
