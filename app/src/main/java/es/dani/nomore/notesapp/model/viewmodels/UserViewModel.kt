@@ -20,6 +20,8 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
     val loginUser = MutableLiveData<User>()
     val validationError = MutableLiveData<String>()
     val newUserId = MutableLiveData<Long>()
+    val usersList = userDao.getAllUsers()
+    val userRoles = MutableLiveData<List<UserRole>>()
 
     init {
         initializeUser()
@@ -29,8 +31,6 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
         super.onCleared()
         viewModelJob.cancel()
     }
-
-    fun isEditing() = userId != null && userId >= 0
 
     fun checkLogin() {
         if (validateUser() && validatePassword()) {
@@ -63,6 +63,7 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
     private fun initializeUser() {
         uiScope.launch {
             currentUser.value = getUserById(userId) ?: getEmptyUser()
+            userRoles.value = UserRole.values().asList()
         }
     }
 
@@ -80,7 +81,7 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
 
     private suspend fun upsertUser(user: User): Long {
         return withContext(Dispatchers.IO) {
-            if (userId != null) { // Update
+            if (userId != null && userId >= 0) { // Update
                 userDao.update(user)
                 userId
             }
@@ -129,8 +130,11 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
     private fun validatePassword(): Boolean {
         val password = currentUser.value?.password
         return if (password != null && password.trim().isNotBlank())
-            true
+            if (password.length >= 8)
+                true
+            else
+                false.also { validationError.value = getApplication<Application>().getString(R.string.invalid_password) }
         else
-            false.also { validationError.value = getApplication<Application>().getString(R.string.invalid_password) }
+            false.also { validationError.value = getApplication<Application>().getString(R.string.password_not_blank) }
     }
 }
