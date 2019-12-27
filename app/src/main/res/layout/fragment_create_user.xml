@@ -111,6 +111,8 @@
             android:layout_marginTop="16dp"
             android:spinnerMode="dropdown"
             android:visibility="gone"
+            app:userRoles="@{userViewModel.userRoles}"
+            app:selectedRole="@={userViewModel.currentUser.userRole}"
             app:layout_constraintBottom_toTopOf="@+id/create_user_button"
             app:layout_constraintStart_toEndOf="@+id/user_role_label"
             app:layout_constraintTop_toBottomOf="@+id/create_password_edit_text"

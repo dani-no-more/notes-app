@@ -49,7 +49,7 @@ class LoginFragment : Fragment() {
     private fun loginSuccess(loginUser: User?) {
         if (loginUser != null) {
             Log.i("LoginFragment", "Login success")
-            val action = LoginFragmentDirections.actionLoginFragmentToNotesFragment(loginUser.userId, loginUser.username, loginUser.userRole)
+            val action = LoginFragmentDirections.actionLoginFragmentToNotesFragment(loginUser.userId, loginUser.username, loginUser.userRole.userRoleId)
             findNavController().navigate(action)
         }
     }

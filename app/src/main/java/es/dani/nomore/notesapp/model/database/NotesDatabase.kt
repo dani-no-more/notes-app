@@ -1,6 +1,7 @@
 package es.dani.nomore.notesapp.model.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-@Database(entities = [User::class, Note::class], version = 6, exportSchema = false)
+@Database(entities = [User::class, Note::class], version = 8, exportSchema = false)
 @TypeConverters(UserRoleConverter::class)
 abstract class NotesDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
@@ -36,6 +37,7 @@ abstract class NotesDatabase : RoomDatabase() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         CoroutineScope(Dispatchers.Main).launch {
+                            Log.i("NotesDatabase", "Inserting initial Admin user")
                             getInstance(context).userDao().insert(getRootAdminUser())
                         }
                     }
@@ -52,8 +54,8 @@ abstract class NotesDatabase : RoomDatabase() {
         private fun getRootAdminUser() = User(
             username = "admin",
             email = "admin",
-            password = "admin",
-            userRole = UserRole.ADMIN.userRoleId
+            password = "adminadmin",
+            userRole = UserRole.ADMIN
         )
     }
 }

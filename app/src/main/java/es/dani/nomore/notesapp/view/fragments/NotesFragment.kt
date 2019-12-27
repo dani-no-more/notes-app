@@ -53,7 +53,6 @@ class NotesFragment : Fragment() {
             }
         })
         noteViewModel.noteList.observe(viewLifecycleOwner, Observer {
-            Log.i("NotesFragment", "The list of notes has changed")
             adapter.submitList(it)
             binding.executePendingBindings()
         })
@@ -80,7 +79,8 @@ class NotesFragment : Fragment() {
     }
 
     private fun goToNewNote(userId: Long, username: String) {
-        val action = NotesFragmentDirections.actionNotesFragmentToCreateEditNoteFragment(userId = userId, username = username)
+        val action = NotesFragmentDirections.actionNotesFragmentToCreateEditNoteFragment(
+            userId = userId, username = username, userRole = userRole.userRoleId)
         findNavController().navigate(action)
     }
 
@@ -100,6 +100,9 @@ class NotesFragment : Fragment() {
     }
 
     private fun goToUserManagement() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val userId = NotesFragmentArgs.fromBundle(requireArguments()).userId
+        val action = NotesFragmentDirections.actionNotesFragmentToUsersFragment(userId)
+        findNavController().navigate(action)
     }
+
 }

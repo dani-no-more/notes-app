@@ -21,5 +21,5 @@ data class User(
     var password: String,
 
     @ColumnInfo(name = "user_role")
-    var userRole: Int = UserRole.TEAM_MEMBER.userRoleId
+    var userRole: UserRole = UserRole.TEAM_MEMBER
 )

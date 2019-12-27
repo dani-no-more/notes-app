@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -27,12 +28,14 @@ class CreateEditNoteFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_edit_note, container, false)
 
-        (activity as AppCompatActivity).supportActionBar?.hide()
+        //(activity as AppCompatActivity).supportActionBar?.hide()
+        setHasOptionsMenu(false)
 
         val args = CreateEditNoteFragmentArgs.fromBundle(requireArguments())
         val noteId = args.noteId
         val userId = args.userId
         val username = args.username
+        val userRole = args.userRole
         val application = requireNotNull(this.activity).application
         val noteDao = NotesDatabase.getInstance(application).noteDao()
         val noteViewModelFactory = NoteViewModelFactory(noteDao, application, userId, noteId)
@@ -48,7 +51,7 @@ class CreateEditNoteFragment : Fragment() {
 
         noteViewModel.validationError.observe(this, Observer { showToastValidationError(it) })
         noteViewModel.newSavedNoteId.observe(this, Observer {
-            goToNoteList(userId, username)
+            goToNoteList(userId, username, userRole)
             //fragmentManager?.popBackStack()
         })
 
@@ -56,8 +59,8 @@ class CreateEditNoteFragment : Fragment() {
     }
 
 
-    private fun goToNoteList(userId: Long, username: String) {
-        val action = CreateEditNoteFragmentDirections.actionCreateEditNoteFragmentToNotesFragment(userId, username)
+    private fun goToNoteList(userId: Long, username: String, userRole: Int) {
+        val action = CreateEditNoteFragmentDirections.actionCreateEditNoteFragmentToNotesFragment(userId, username, userRole)
         findNavController().navigate(action)
     }
 
