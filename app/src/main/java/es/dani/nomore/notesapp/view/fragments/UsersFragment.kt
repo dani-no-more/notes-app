@@ -1,11 +1,12 @@
 package es.dani.nomore.notesapp.view.fragments
 
-
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,15 +16,12 @@ import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentUsersBinding
 import es.dani.nomore.notesapp.model.database.NotesDatabase
 import es.dani.nomore.notesapp.model.entities.User
-import es.dani.nomore.notesapp.model.entities.UserRole
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModel
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModelFactory
 import es.dani.nomore.notesapp.view.adapters.UserItemViewHolder
 import es.dani.nomore.notesapp.view.adapters.UsersAdapter
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class UsersFragment : Fragment() {
 
     lateinit var binding: FragmentUsersBinding
@@ -83,6 +81,7 @@ class UsersFragment : Fragment() {
     }
 
     private fun goToNotesManagement() {
+        hideKeyboard()
         val currentUser = binding.userViewModel?.currentUser?.value
         if (currentUser != null) {
             val action = UsersFragmentDirections.actionUsersFragmentToNotesFragment(currentUser.userId, currentUser.username, currentUser.userRole.userRoleId)
@@ -91,12 +90,22 @@ class UsersFragment : Fragment() {
     }
 
     private fun performLogout() {
+        hideKeyboard()
         findNavController().navigate(UsersFragmentDirections.actionUsersFragmentToLoginFragment())
     }
 
     private fun goToEditProfile(userId: Long = -1L, adminUserId: Long = -1L) {
+        hideKeyboard()
         val action = UsersFragmentDirections.actionUsersFragmentToCreateUserFragment(userId = userId, adminUserId = adminUserId)
         findNavController().navigate(action)
+    }
+
+    private fun hideKeyboard() {
+        val view = (activity as AppCompatActivity).currentFocus
+        view?.let {
+            val imm = context?.let { it1 -> ContextCompat.getSystemService(it1, InputMethodManager::class.java) }
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
 }

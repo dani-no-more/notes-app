@@ -1,6 +1,7 @@
 package es.dani.nomore.notesapp.model.viewmodels
 
 import android.app.Application
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +19,7 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
     val currentNote = MutableLiveData<Note>()
     val noteList = noteDao.getNotesByUser(userId)
     val newSavedNoteId = MutableLiveData<Long>()
+    val deleteNoteTitle = MutableLiveData<String>()
 
     init {
         initializeNote()
@@ -34,14 +36,37 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
             uiScope.launch {
                 val currentValue = currentNote.value
                 if (currentValue != null) {
-                    val newNote = Note(title = currentValue.title, content = currentValue.content, owner = userId, lastModificationTime = System.currentTimeMillis())
-                    Log.i("NoteViewModel", "Note ready to be saved")
-                    newSavedNoteId.value = upsertNote(newNote)
-                    Log.i("NoteViewModel", "Note saved")
+                    val newNote = currentValue.copy(lastModificationTime = System.currentTimeMillis())
+                    val insertedNoteId = when(isEdition()) {
+                        true -> {
+                            Log.i("NoteViewModel", "Editing note")
+                            updateNote(newNote)
+                        }
+                        false -> {
+                            Log.i("NoteViewModel", "Creating note")
+                            insertNote(newNote)
+                        }
+                    }
+
+                    if (insertedNoteId >= 0)
+                        newSavedNoteId.value = insertedNoteId
+                    else
+                        validationError.value = getApplication<Application>().getString(R.string.note_already_exists)
                 }
             }
         }
     }
+
+    fun deleteNote() {
+        if (isEdition()) {
+            uiScope.launch {
+                removeNote(currentNote.value!!)
+                deleteNoteTitle.value = currentNote.value?.title
+            }
+        }
+    }
+
+    fun isEdition() = noteId != null && noteId >= 0
 
     private fun initializeNote() {
         uiScope.launch {
@@ -55,28 +80,43 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
         }
     }
 
-    private suspend fun upsertNote(note: Note): Long {
-        Log.i("NoteViewModel", "Upsert note: %s".format(note.toString()))
+    private suspend fun insertNote(note: Note): Long {
+        Log.i("NoteViewModel", "Insert note: $note")
         return withContext(Dispatchers.IO) {
-            when(isEdition()) {
-                true -> {
-                    Log.i("NoteViewModel", "Editing note")
-                    noteDao.update(note.copy(noteId = noteId!!))
-                    noteId!!
-                }
-                false -> {
-                    Log.i("NoteViewModel", "Creating note")
-                    noteDao.insert(note)
-                }
+            var insertedNoteId = -1L
+            try {
+                insertedNoteId = noteDao.insert(note)
+            } catch (e: SQLiteConstraintException) {
+                Log.e("NoteViewModel", "Unique constraint violation: User already has a note with that title")
             }
+            insertedNoteId
+        }
+    }
+
+    private suspend fun updateNote(note: Note): Long {
+        Log.i("NoteViewModel", "Update note: $note")
+        return withContext(Dispatchers.IO) {
+            var updatedNoteId = note.noteId
+            try {
+                noteDao.update(note)
+            } catch (e: SQLiteConstraintException) {
+                Log.e("NoteViewModel", "Unique constraint violation: User already has a note with that title")
+                updatedNoteId = -1L
+            }
+            updatedNoteId
+        }
+    }
+
+    private suspend fun removeNote(note: Note) {
+        Log.i("NoteViewModel", "Deleting note: ${note.title}")
+        withContext(Dispatchers.IO) {
+            noteDao.delete(note)
         }
     }
 
     private fun getEmptyNote(): Note {
-        return Note(title = "", content = "", owner = -1L)
+        return Note(title = "", content = "", owner = userId)
     }
-
-    private fun isEdition() = noteId != null && noteId >= 0
 
     private fun validateTitle(): Boolean {
         val title = currentNote.value?.title

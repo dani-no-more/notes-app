@@ -6,9 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +25,7 @@ import es.dani.nomore.notesapp.model.viewmodels.UserViewModelFactory
 class LoginFragment : Fragment() {
 
     lateinit var binding: LoginFragmentBinding
+    var doLogin = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
@@ -47,8 +49,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginSuccess(loginUser: User?) {
-        if (loginUser != null) {
+        hideKeyboard()
+        if (loginUser != null && !doLogin) {
             Log.i("LoginFragment", "Login success")
+            // For some reason this is being called twice when after using the back button from the register user Fragment
+            doLogin = true
             val action = LoginFragmentDirections.actionLoginFragmentToNotesFragment(loginUser.userId, loginUser.username, loginUser.userRole.userRoleId)
             findNavController().navigate(action)
         }
@@ -61,6 +66,15 @@ class LoginFragment : Fragment() {
 
     private fun showToastValidationError(msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    }
+
+    private fun hideKeyboard() {
+        val view = (activity as AppCompatActivity).currentFocus
+        view?.let {
+            val imm: InputMethodManager? =
+                context?.let { it1 -> getSystemService(it1, InputMethodManager::class.java) }
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
 }

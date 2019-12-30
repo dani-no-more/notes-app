@@ -27,8 +27,6 @@ class NoteItemViewHolder private constructor(val binding: NoteListItemViewBindin
         }
         binding.note = note
         binding.executePendingBindings()
-        //binding.itemNoteTitleText.text = note.title
-        //binding.itemNoteLastModificationText.text = note.lastModificationTime.toString()
     }
 
     companion object {

@@ -12,26 +12,10 @@ import es.dani.nomore.notesapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var navController: NavController
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-
-        navController = this.findNavController(R.id.navigation_fragment)
-        //NavigationUI.setupActionBarWithNavController(this, navController)
         setSupportActionBar(binding.notesActionBar)
     }
 
-    /*
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.action_bar_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp()
-    }
-    */
 }
