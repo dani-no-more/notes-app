@@ -18,7 +18,6 @@ import es.dani.nomore.notesapp.model.database.NotesDatabase
 import es.dani.nomore.notesapp.model.entities.User
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModel
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModelFactory
-import es.dani.nomore.notesapp.view.adapters.UserRoleSpinnerAdapter
 
 
 class CreateUserFragment : Fragment() {
@@ -37,10 +36,12 @@ class CreateUserFragment : Fragment() {
         val isRegistering = CreateUserFragmentArgs.fromBundle(requireArguments()).isRegistration
         val userId = CreateUserFragmentArgs.fromBundle(requireArguments()).userId
         val adminUserId = CreateUserFragmentArgs.fromBundle(requireArguments()).adminUserId
+        val isAdminUser = adminUserId >= 0
+        val isNewUser = userId == -1L
 
         changeActionBarTitle(when {
             isRegistering -> application.getString(R.string.register_user_title_text)
-            userId == -1L -> application.getString(R.string.new_user_title_text)
+            isNewUser -> application.getString(R.string.new_user_title_text)
             else -> application.getString(R.string.edit_user_title_text)
         })
 
@@ -57,32 +58,33 @@ class CreateUserFragment : Fragment() {
 
         userViewModel.newUserId.observe(this, Observer {
             when {
-                isRegistering -> goBackToLogin(it)
-                adminUserId >= 0 -> goBackToUsers(adminUserId)
-                else -> goBackToNotes(userViewModel.currentUser.value!!)
+                isRegistering -> goBackToLogin(it).also { showToastMessage("User created!") }
+                isAdminUser -> goBackToUsers(adminUserId).also { showToastMessage("User saved!") }
+                else -> goBackToNotes(userViewModel.currentUser.value!!).also { showToastMessage("User edited!") }
             }
         })
 
-        //binding.userRoleSpinner.adapter = UserRoleSpinnerAdapter(application.applicationContext)
-        binding.userRoleSpinner.visibility = if (adminUserId >= 0) View.VISIBLE else View.GONE
+        userViewModel.deleteUsername.observe(this, Observer {
+            goBackToUsers(adminUserId).also { showToastMessage("User $it deleted!") }
+        })
+
+        binding.userRoleSpinner.visibility = if (isAdminUser) View.VISIBLE else View.GONE
+        binding.deleteUserButton.visibility = if (isAdminUser && !isNewUser) View.VISIBLE else View.GONE
 
         return binding.root
     }
 
     private fun goBackToLogin(newUserId: Long) {
-        showToastMessage("User created!")
         val action = CreateUserFragmentDirections.actionCreateUserFragmentToLoginFragment(newUserId)
         findNavController().navigate(action)
     }
 
     private fun goBackToNotes(user: User) {
-        showToastMessage("User edited!")
         val action = CreateUserFragmentDirections.actionCreateUserFragmentToNotesFragment(user.userId, user.username, user.userRole.userRoleId)
         findNavController().navigate(action)
     }
 
     private fun goBackToUsers(adminUserId: Long) {
-        showToastMessage("User saved!")
         val action = CreateUserFragmentDirections.actionCreateUserFragmentToUsersFragment(adminUserId)
         findNavController().navigate(action)
     }

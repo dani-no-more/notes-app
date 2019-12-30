@@ -1,10 +1,8 @@
 package es.dani.nomore.notesapp.view.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -34,7 +32,8 @@ class NotesFragment : Fragment() {
         val noteDao = NotesDatabase.getInstance(application).noteDao()
         val userId = NotesFragmentArgs.fromBundle(requireArguments()).userId
         val username = NotesFragmentArgs.fromBundle(requireArguments()).username
-        userRole = UserRole.values()[NotesFragmentArgs.fromBundle(requireArguments()).userRole]
+        val userRoleId = NotesFragmentArgs.fromBundle(requireArguments()).userRole
+        userRole = UserRole.values()[userRoleId]
 
         val actionBar: ActionBar? = (activity as AppCompatActivity).supportActionBar
         actionBar?.title = getString(R.string.username_title_text, username)
@@ -49,7 +48,7 @@ class NotesFragment : Fragment() {
 
         val adapter = NotesAdapter(object: NoteItemViewHolder.NoteItemClickListener {
             override fun onItemClick(note: Note) {
-                goToEditNote(note.noteId, userId, username)
+                goToEditNote(note.noteId, userId, username, userRoleId)
             }
         })
         noteViewModel.noteList.observe(viewLifecycleOwner, Observer {
@@ -84,14 +83,14 @@ class NotesFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun goToEditNote(noteId: Long, userId: Long, username: String) {
-        val action = NotesFragmentDirections.actionNotesFragmentToCreateEditNoteFragment(noteId, userId, username)
+    private fun goToEditNote(noteId: Long, userId: Long, username: String, userRole: Int) {
+        val action = NotesFragmentDirections.actionNotesFragmentToCreateEditNoteFragment(noteId, userId, username, userRole)
         findNavController().navigate(action)
     }
 
     private fun goToEditProfile() {
         val userId = NotesFragmentArgs.fromBundle(requireArguments()).userId
-        val action = NotesFragmentDirections.actionNotesFragmentToCreateUserFragment(false, userId)
+        val action = NotesFragmentDirections.actionNotesFragmentToCreateUserFragment(userId = userId)
         findNavController().navigate(action)
     }
 

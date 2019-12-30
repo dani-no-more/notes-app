@@ -18,6 +18,7 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
     val currentNote = MutableLiveData<Note>()
     val noteList = noteDao.getNotesByUser(userId)
     val newSavedNoteId = MutableLiveData<Long>()
+    val deleteNoteTitle = MutableLiveData<String>()
 
     init {
         initializeNote()
@@ -43,6 +44,17 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
         }
     }
 
+    fun deleteNote() {
+        if (isEdition()) {
+            uiScope.launch {
+                removeNote(currentNote.value!!)
+                deleteNoteTitle.value = currentNote.value?.title
+            }
+        }
+    }
+
+    fun isEdition() = noteId != null && noteId >= 0
+
     private fun initializeNote() {
         uiScope.launch {
             currentNote.value = getNoteById(noteId) ?: getEmptyNote()
@@ -56,7 +68,8 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
     }
 
     private suspend fun upsertNote(note: Note): Long {
-        Log.i("NoteViewModel", "Upsert note: %s".format(note.toString()))
+        //Log.i("NoteViewModel", "Upsert note: %s".format(note.toString()))
+        Log.i("NoteViewModel", "Upsert note: $note")
         return withContext(Dispatchers.IO) {
             when(isEdition()) {
                 true -> {
@@ -72,11 +85,16 @@ class NoteViewModel(private val noteDao: NoteDao, application: Application, priv
         }
     }
 
+    private suspend fun removeNote(note: Note) {
+        Log.i("NoteViewModel", "Deleting note: ${note.title}")
+        withContext(Dispatchers.IO) {
+            noteDao.delete(note)
+        }
+    }
+
     private fun getEmptyNote(): Note {
         return Note(title = "", content = "", owner = -1L)
     }
-
-    private fun isEdition() = noteId != null && noteId >= 0
 
     private fun validateTitle(): Boolean {
         val title = currentNote.value?.title

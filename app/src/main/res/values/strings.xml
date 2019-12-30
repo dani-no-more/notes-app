@@ -25,6 +25,7 @@
     <string name="credential_fail">Invalid password</string>
     <string name="username_not_blank">Username cannot be empty</string>
     <string name="invalid_user">Invalid user or empty</string>
+    <string name="invalid_email">Not a valid email address"</string>
     <string name="user_exists">User already exists</string>
     <string name="password_not_blank">Password cannot be empty</string>
     <string name="invalid_password">Password should has at least 8 characters</string>
@@ -46,5 +47,6 @@
     <string name="logout_action_title">Logout</string>
     <string name="users_management_menu_title">Users</string>
     <string name="notes_management_menu_title">Notes</string>
+    <string name="delete_user_button_text">DELETE</string>
 
 </resources>

@@ -46,8 +46,10 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/note_background"
             android:ems="10"
+            android:fontFamily="casual"
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:text="@={noteViewModel.currentNote.content}"
@@ -69,6 +71,21 @@
             android:src="@android:drawable/ic_menu_edit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/delete_note_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="24dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:onClick="@{() -> noteViewModel.deleteNote()}"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
