@@ -22,7 +22,7 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
     val validationError = MutableLiveData<String>()
     val newUserId = MutableLiveData<Long>()
     val deleteUsername = MutableLiveData<String>()
-    val usersList = userDao.getAllUsers()
+    val usersList = userDao.getAllOtherUsers(userId ?: -1L)
     val userRoles = MutableLiveData<List<UserRole>>()
 
     init {
@@ -114,8 +114,14 @@ class UserViewModel(private val userDao: UserDao, application: Application, priv
 
     private suspend fun updateUser(user: User): Long {
         return withContext(Dispatchers.IO) {
-            userDao.update(user)
-            user.userId
+            var updatedId = user.userId
+            try {
+                userDao.update(user)
+            } catch (e: SQLiteConstraintException) {
+                Log.e("UserViewModel", "User's unique constraint violated: ${user.email} repeated")
+                updatedId = -1L
+            }
+            updatedId
         }
     }
 

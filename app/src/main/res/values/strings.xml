@@ -40,6 +40,7 @@
     <!-- Validation messages -->
     <string name="note_title_not_blank">Note\'s title should not be blank</string>
     <string name="note_content_not_blank">Note\'s content should not be blank</string>
+    <string name="note_already_exists">A note with that title already exists</string>
 
 
     <!-- Menu options -->

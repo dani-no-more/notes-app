@@ -24,6 +24,9 @@ interface UserDao {
     @Query("SELECT * FROM user_table ORDER BY username ASC")
     fun getAllUsers(): LiveData<List<User>>
 
+    @Query("SELECT * FROM user_table WHERE userId != :userId ORDER BY user_role, username ASC")
+    fun getAllOtherUsers(userId: Long): LiveData<List<User>>
+
     @Query("DELETE FROM user_table")
     suspend fun clear()
 }
