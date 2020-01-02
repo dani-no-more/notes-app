@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">NotesApp</string>
+    <string name="app_preferences_key">NotesAppSharedPreferencesKey</string>
+    <string name="logged_user_id">LoggedUserId</string>
+    <string name="logged_user_name">LoggedUserName</string>
+    <string name="logged_user_role">LoggedUserRole</string>
 
     <!-- USERS -->
     <string name="user_label">User</string>

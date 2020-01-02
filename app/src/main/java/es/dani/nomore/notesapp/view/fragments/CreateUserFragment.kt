@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentCreateUserBinding
@@ -53,19 +56,19 @@ class CreateUserFragment : Fragment() {
 
         userViewModel.validationError.observe(this, Observer {
             if (it != null && it.trim().isNotEmpty())
-                showToastMessage(it)
+                showSnackbarMessage(it)
         })
 
         userViewModel.newUserId.observe(this, Observer {
             when {
-                isRegistering -> goBackToLogin(it).also { showToastMessage("User created!") }
-                isAdminUser -> goBackToUsers(adminUserId).also { showToastMessage("User saved!") }
-                else -> goBackToNotes(userViewModel.currentUser.value!!).also { showToastMessage("User edited!") }
+                isRegistering -> goBackToLogin(it).also { showSnackbarMessage("User created!") }
+                isAdminUser -> goBackToUsers(adminUserId).also { showSnackbarMessage("User saved!") }
+                else -> goBackToNotes(userViewModel.currentUser.value!!).also { showSnackbarMessage("User edited!") }
             }
         })
 
         userViewModel.deleteUsername.observe(this, Observer {
-            goBackToUsers(adminUserId).also { showToastMessage("User $it deleted!") }
+                deletedUsername -> goBackToUsers(adminUserId).also { showSnackbarMessage("User $deletedUsername deleted!") }
         })
 
         binding.userRoleSpinner.visibility = if (isAdminUser) View.VISIBLE else View.GONE
@@ -75,22 +78,37 @@ class CreateUserFragment : Fragment() {
     }
 
     private fun goBackToLogin(newUserId: Long) {
+        hideKeyboard()
         val action = CreateUserFragmentDirections.actionCreateUserFragmentToLoginFragment(newUserId)
         findNavController().navigate(action)
     }
 
     private fun goBackToNotes(user: User) {
+        hideKeyboard()
         val action = CreateUserFragmentDirections.actionCreateUserFragmentToNotesFragment(user.userId, user.username, user.userRole.userRoleId)
         findNavController().navigate(action)
     }
 
     private fun goBackToUsers(adminUserId: Long) {
+        hideKeyboard()
         val action = CreateUserFragmentDirections.actionCreateUserFragmentToUsersFragment(adminUserId)
         findNavController().navigate(action)
     }
 
     private fun showToastMessage(msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    }
+
+    private fun hideKeyboard() {
+        val view = (activity as AppCompatActivity).currentFocus
+        view?.let {
+            val imm = context?.let { it1 -> ContextCompat.getSystemService(it1, InputMethodManager::class.java) }
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    private fun showSnackbarMessage(msg: String) {
+        Snackbar.make(activity!!.findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG).show()
     }
 
     private fun changeActionBarTitle(newTitle: String) {
