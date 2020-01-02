@@ -1,5 +1,6 @@
 package es.dani.nomore.notesapp.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -16,6 +17,7 @@ import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentUsersBinding
 import es.dani.nomore.notesapp.model.database.NotesDatabase
 import es.dani.nomore.notesapp.model.entities.User
+import es.dani.nomore.notesapp.model.entities.UserRole
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModel
 import es.dani.nomore.notesapp.model.viewmodels.UserViewModelFactory
 import es.dani.nomore.notesapp.view.adapters.UserItemViewHolder
@@ -81,7 +83,6 @@ class UsersFragment : Fragment() {
     }
 
     private fun goToNotesManagement() {
-        hideKeyboard()
         val currentUser = binding.userViewModel?.currentUser?.value
         if (currentUser != null) {
             val action = UsersFragmentDirections.actionUsersFragmentToNotesFragment(currentUser.userId, currentUser.username, currentUser.userRole.userRoleId)
@@ -90,22 +91,19 @@ class UsersFragment : Fragment() {
     }
 
     private fun performLogout() {
-        hideKeyboard()
+        val sharedPreferences = activity?.getSharedPreferences(getString(R.string.app_preferences_key), Context.MODE_PRIVATE)
+        sharedPreferences?.edit()?.let {
+            it.putLong(getString(R.string.logged_user_id), -1L)
+            it.putString(getString(R.string.logged_user_name), null)
+            it.putInt(getString(R.string.logged_user_role), UserRole.TEAM_MEMBER.userRoleId)
+            it.commit()
+        }
         findNavController().navigate(UsersFragmentDirections.actionUsersFragmentToLoginFragment())
     }
 
     private fun goToEditProfile(userId: Long = -1L, adminUserId: Long = -1L) {
-        hideKeyboard()
         val action = UsersFragmentDirections.actionUsersFragmentToCreateUserFragment(userId = userId, adminUserId = adminUserId)
         findNavController().navigate(action)
-    }
-
-    private fun hideKeyboard() {
-        val view = (activity as AppCompatActivity).currentFocus
-        view?.let {
-            val imm = context?.let { it1 -> ContextCompat.getSystemService(it1, InputMethodManager::class.java) }
-            imm?.hideSoftInputFromWindow(view.windowToken, 0)
-        }
     }
 
 }

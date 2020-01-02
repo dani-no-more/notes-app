@@ -1,5 +1,6 @@
 package es.dani.nomore.notesapp.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -95,6 +96,13 @@ class NotesFragment : Fragment() {
     }
 
     private fun performLogout() {
+        val sharedPreferences = activity?.getSharedPreferences(getString(R.string.app_preferences_key), Context.MODE_PRIVATE)
+        sharedPreferences?.edit()?.let {
+            it.putLong(getString(R.string.logged_user_id), -1L)
+            it.putString(getString(R.string.logged_user_name), null)
+            it.putInt(getString(R.string.logged_user_role), UserRole.TEAM_MEMBER.userRoleId)
+            it.commit()
+        }
         findNavController().navigate(NotesFragmentDirections.actionNotesFragmentToLoginFragment())
     }
 

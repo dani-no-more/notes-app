@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import es.dani.nomore.notesapp.R
 import es.dani.nomore.notesapp.databinding.FragmentCreateEditNoteBinding
@@ -51,7 +52,7 @@ class CreateEditNoteFragment : Fragment() {
 
         if (noteViewModel.isEdition()) binding.deleteNoteButton.show()  else binding.deleteNoteButton.hide()
 
-        noteViewModel.validationError.observe(this, Observer { showToastValidationError(it) })
+        noteViewModel.validationError.observe(this, Observer { showSnackbarMessage(it) })
         noteViewModel.newSavedNoteId.observe(this, Observer {
             goToNoteList(userId, username, userRole)
         })
@@ -75,6 +76,10 @@ class CreateEditNoteFragment : Fragment() {
 
     private fun showToastValidationError(msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    }
+
+    private fun showSnackbarMessage(msg: String) {
+        Snackbar.make(activity!!.findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG).show()
     }
 
     private fun hideKeyboard() {
