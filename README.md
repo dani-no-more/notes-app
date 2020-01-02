@@ -72,3 +72,9 @@ The main screen shows the complete list of users registered in the app. An icon 
 A new user can be added by clicking in the _Floating Button_ with the **plus** symbol (+). Also, any user can be edited by clicking in its name on the list. Both methods go to the same user register _Fragment_, but allowing this time to also select that user's **role**. Also, when editing, an additional _Floating Button_ appears allowing deletion of the user.
 
 While in this screen, the _user management icon_ in the _Action Bar_ is replaced by a _note icon_, which allows going back to the notes by clicking it.
+
+*__NOTE__:*
+A _default admin user_ is created with credentials:
+* **User:** _admin_
+* **Password:** _adminadmin_
+
